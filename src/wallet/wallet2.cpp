@@ -37,6 +37,7 @@ void do_prepare_file_names(const std::string& file_path, std::string& keys_file,
     keys_file += ".keys";
   }
 }
+
 } //namespace
 
 namespace tools
@@ -434,7 +435,7 @@ void wallet2::load_keys(const std::string& keys_file_name, const std::string& pa
   THROW_WALLET_EXCEPTION_IF(!r, error::invalid_password);
 }
 //----------------------------------------------------------------------------------------------------
-void wallet2::generate(const std::string& wallet_, const std::string& password)
+void wallet2::generate(const std::string& wallet_, const std::string& password, const crypto::secret_key& recovery_param, bool recover)
 {
   clear();
   prepare_file_names(wallet_);
@@ -443,7 +444,8 @@ void wallet2::generate(const std::string& wallet_, const std::string& password)
   THROW_WALLET_EXCEPTION_IF(boost::filesystem::exists(m_wallet_file, ignored_ec), error::file_exists, m_wallet_file);
   THROW_WALLET_EXCEPTION_IF(boost::filesystem::exists(m_keys_file,   ignored_ec), error::file_exists, m_keys_file);
 
-  m_account.generate();
+  m_account.generate(recovery_param, recover);
+
   m_account_public_address = m_account.get_keys().m_account_address;
 
   bool r = store_keys(m_keys_file, password);
