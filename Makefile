@@ -14,7 +14,7 @@ all-debug: build-debug
 
 cmake-release:
 	mkdir -p build/release
-	cd build/release && cmake -D CMAKE_BUILD_TYPE=Release ../..
+	cd build/release && cmake -D CMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="-Ofast -flto -fuse-linker-plugin -funsafe-loop-optimizations -fmerge-all-constants -maes" -DCMAKE_CXX_FLAGS="-Ofast -flto -fuse-linker-plugin -funsafe-loop-optimizations -fmerge-all-constants -maes" ../..
 
 build-release: cmake-release
 	cd build/release && $(MAKE)
